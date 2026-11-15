@@ -1,0 +1,27 @@
+name: Build Windows game
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.3
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0
+          use-dotnet: false
+          include-templates: true
+      - name: Import project resources
+        run: godot --headless --editor --path . --import
+      - name: Export Windows executable
+        run: mkdir -p build && godot --headless --path . --export-release "Windows Desktop" build/WorldDominion.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WorldDominion-Windows
+          path: build/WorldDominion.exe
+          if-no-files-found: error

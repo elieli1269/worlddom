@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs>
+  <radialGradient id="bg" cx="72%" cy="42%" r="78%"><stop stop-color="#203d48"/><stop offset=".56" stop-color="#102631"/><stop offset="1" stop-color="#06121c"/></radialGradient>
+  <radialGradient id="globe" cx="34%" cy="26%" r="80%"><stop stop-color="#78917e"/><stop offset=".48" stop-color="#355e62"/><stop offset=".82" stop-color="#193b49"/><stop offset="1" stop-color="#0a1d29"/></radialGradient>
+  <linearGradient id="paper" x2="0" y2="1"><stop stop-color="#d8c69b"/><stop offset="1" stop-color="#9c885f"/></linearGradient>
+  <radialGradient id="shade"><stop offset=".46" stop-color="#06121c" stop-opacity="0"/><stop offset="1" stop-color="#02080d" stop-opacity=".82"/></radialGradient>
+  <pattern id="grain" width="72" height="72" patternUnits="userSpaceOnUse"><path d="M0 14h72M0 53h72" stroke="#d1b982" stroke-opacity=".035"/><circle cx="14" cy="29" r="1" fill="#e4d5b3" fill-opacity=".08"/><circle cx="56" cy="66" r=".8" fill="#e4d5b3" fill-opacity=".06"/></pattern>
+  <clipPath id="sphere"><circle cx="1175" cy="390" r="330"/></clipPath>
+  <filter id="soft"><feGaussianBlur stdDeviation="28"/></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<ellipse cx="1210" cy="830" rx="500" ry="115" fill="#c89b50" opacity=".13" filter="url(#soft)"/>
+<!-- engraved latitude and longitude -->
+<g fill="none" stroke="#c7b07a" stroke-width="1" opacity=".18">
+  <circle cx="1175" cy="390" r="330"/><ellipse cx="1175" cy="390" rx="285" ry="330"/><ellipse cx="1175" cy="390" rx="145" ry="330"/>
+  <ellipse cx="1175" cy="390" rx="330" ry="235"/><ellipse cx="1175" cy="390" rx="330" ry="112"/>
+</g>
+<circle cx="1175" cy="390" r="330" fill="url(#globe)" stroke="#d6b66e" stroke-width="8"/>
+<circle cx="1175" cy="390" r="344" fill="none" stroke="#805f37" stroke-width="2"/>
+<g clip-path="url(#sphere)" fill="url(#paper)" stroke="#e3d2a8" stroke-opacity=".45" stroke-width="2">
+  <!-- original simplified atlas land silhouettes -->
+  <path d="M1014 157l44-18 28 14 5 23 28 10 8 25-16 22 9 28-19 18-10 33-28 4-13-30-23-11-8-34-31-6-13-26 14-20-4-22 29-10zM1080 312l31 8 20 28-5 31-18 17-7 38-21 34-7 44-18 28-16-15 5-39-16-25 9-37-10-23 13-32-7-29zM1180 199l36-21 29 8 15 23 40-2 27 19 42-1 35 24-9 31-31 11-11 30-29 15-27-11-14 23-38-3-19 22-28-13-18-34-29-5-9-33-35-9-6-31-24-13 20-25zM1337 407l44-13 43 22 17 34-20 26-40-1-28-18-30 4-19-23zM1231 502l31 7 13 27-22 27-27-13-12-26z"/>
+  <path d="M870 274l32-10 26 23-2 37-22 17-23-22-21-7zM1433 310l28 7 7 25-18 20-27-14z"/>
+</g>
+<g fill="none" stroke="#dfc88f" stroke-opacity=".34" stroke-width="1.3">
+  <path d="M902 690c160-68 315-75 535-12M954 727c171-56 329-52 478 6M1001 761c130-36 271-32 373 4"/>
+  <path d="M105 791c180-82 355-98 531-44M165 822c156-57 306-70 440-39"/>
+  <circle cx="1390" cy="748" r="49"/><circle cx="1390" cy="748" r="39"/><path d="M1390 687v122m-61-61h122m-104-43 86 86m0-86-86 86"/>
+</g>
+<!-- parchment chart on the lower right -->
+<path d="M760 835c157-72 398-88 690-32l38 115H745z" fill="#473b2b" opacity=".72"/>
+<path d="M789 833c176-57 401-71 635-29l25 114H772z" fill="url(#paper)" opacity=".82"/>
+<g fill="none" stroke="#675b43" stroke-width="1" opacity=".46"><path d="M833 858c110-38 217-48 332-31m-306 59c133-34 243-37 365-19m-222-75 20 85m165-98-12 91"/><circle cx="1400" cy="863" r="31"/></g>
+<rect width="1600" height="900" fill="url(#grain)"/>
+<rect width="1600" height="900" fill="url(#shade)"/>
+<!-- restrained gold frame -->
+<rect x="25" y="25" width="1550" height="850" rx="5" fill="none" stroke="#b9995d" stroke-opacity=".42" stroke-width="2"/>
+<path d="M25 78V25h53M1522 25h53v53M25 822v53h53m1491 0h53v-53" fill="none" stroke="#d8bc7c" stroke-width="3" opacity=".72"/>
+</svg>
