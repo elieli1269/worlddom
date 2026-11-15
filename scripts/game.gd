@@ -1,8 +1,8 @@
 extends Control
 
 const MapView = preload("res://scripts/world_map.gd")
+const MapData = preload("res://scripts/map_data.gd")
 const FlagView = preload("res://scripts/nation_flag.gd")
-const WORLD_PATH := "res://data/world.geojson"
 const SAVE_DIR := "user://saves"
 const BG := Color("#091925")
 const PANEL := Color("#102431")
@@ -18,6 +18,7 @@ var header_label: Label
 var selection_label: Label
 var country_option: OptionButton
 var current_panel: PanelContainer
+var loaded_levels: Dictionary = {0: true}
 
 func _ready() -> void:
 	get_tree().root.content_scale_size = Vector2i(1440, 900)
@@ -25,30 +26,7 @@ func _ready() -> void:
 	_show_title()
 
 func _load_world() -> void:
-	var file := FileAccess.open(WORLD_PATH, FileAccess.READ)
-	if file == null:
-		push_error("Missing bundled Natural Earth world map.")
-		return
-	var parsed = JSON.parse_string(file.get_as_text())
-	if not parsed is Dictionary: return
-	for item in parsed.features:
-		var p: Dictionary = item.properties
-		var name := str(p.get("ADMIN", p.get("NAME", "Unknown")))
-		var iso := str(p.get("ADM0_A3", p.get("SOV_A3", "UNK")))
-		if iso == "-99": iso = str(p.get("SOV_A3", name.substr(0, 3).to_upper()))
-		var geom: Dictionary = item.geometry
-		var polys: Array = []
-		if geom.type == "Polygon": polys = [geom.coordinates]
-		elif geom.type == "MultiPolygon": polys = geom.coordinates
-		else: continue
-		var weighted := Vector2.ZERO
-		var count := 0
-		for poly in polys:
-			if poly.is_empty(): continue
-			for c in poly[0]:
-				weighted += Vector2(float(c[0]), float(c[1])); count += 1
-		var center := weighted / maxf(1, count)
-		world.append({"id": iso, "name": name, "polygons": polys, "lon": center.x, "lat": center.y, "capital": str(p.get("LABEL_X", ""))})
+	world = MapData.load_layer(0)
 
 func _show_title() -> void:
 	_clear()
@@ -109,42 +87,45 @@ func _new_game() -> void:
 func _show_game() -> void:
 	_clear()
 	var backdrop := ColorRect.new(); backdrop.color = BG; backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(backdrop)
-	var root := VBoxContainer.new()
-	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	root.add_theme_constant_override("separation", 0)
-	add_child(root)
-	var top := _panel(PANEL); top.custom_minimum_size.y = 64; root.add_child(top)
+	var top := _panel(PANEL); top.add_theme_stylebox_override("panel", _style(PANEL, Color("#294451"))); var top_style: StyleBoxFlat = top.get_theme_stylebox("panel").duplicate(); top_style.content_margin_top = 3; top_style.content_margin_bottom = 3; top.add_theme_stylebox_override("panel", top_style); top.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE); top.offset_bottom = 64; add_child(top)
 	var bar := HBoxContainer.new(); bar.add_theme_constant_override("separation", 18); bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(bar)
 	var compass := TextureRect.new(); compass.texture = load("res://assets/ui/compass_rose.svg"); compass.custom_minimum_size = Vector2(38, 38); compass.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; compass.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; bar.add_child(compass)
 	var brand := _label("◆  WORLD DOMINION", 19, GOLD); bar.add_child(brand)
 	header_label = _label("", 16, Color("#e9e4d7")); header_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL; header_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; bar.add_child(header_label)
 	var save_btn := _button("SAVE"); save_btn.pressed.connect(_save_dialog); bar.add_child(save_btn)
+	var layers_btn := _button("LAYERS"); bar.add_child(layers_btn)
+	var layers_popup := PopupMenu.new(); layers_popup.add_check_item("Political colors", 0); layers_popup.add_check_item("International borders", 1); layers_popup.add_check_item("Administrative limits", 2); layers_popup.add_check_item("Country and region names", 3)
+	for item_id in range(4): layers_popup.set_item_checked(item_id, true)
+	add_child(layers_popup); layers_btn.pressed.connect(func(): layers_popup.position = Vector2i(layers_btn.global_position + Vector2(0, layers_btn.size.y)); layers_popup.popup())
+	layers_popup.id_pressed.connect(func(id: int): layers_popup.set_item_checked(id, not layers_popup.is_item_checked(id)); map_view.set_layers({["political", "international", "administrative", "labels"][id]: layers_popup.is_item_checked(id)}) )
 	var menu_btn := _button("MENU"); menu_btn.pressed.connect(_show_title); bar.add_child(menu_btn)
-	var body := HBoxContainer.new(); body.size_flags_vertical = Control.SIZE_EXPAND_FILL; body.add_theme_constant_override("separation", 0); root.add_child(body)
-	var left := _panel(PANEL); left.custom_minimum_size.x = 250; left.size_flags_vertical = Control.SIZE_EXPAND_FILL; body.add_child(left)
-	var leftbox := VBoxContainer.new(); leftbox.add_theme_constant_override("separation", 10); left.add_child(leftbox)
+	var body := HBoxContainer.new(); body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); body.offset_top = 64; body.offset_bottom = -36; body.add_theme_constant_override("separation", 0); add_child(body)
+	var left := _panel(PANEL); left.custom_minimum_size.x = 250; body.add_child(left)
+	var leftscroll := ScrollContainer.new(); leftscroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; leftscroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL; left.add_child(leftscroll)
+	var leftbox := VBoxContainer.new(); leftbox.add_theme_constant_override("separation", 10); leftbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL; leftscroll.add_child(leftbox)
 	leftbox.add_child(_label("NATION OVERVIEW", 13, GOLD))
 	var player_flag := _nation_flag(state.player); leftbox.add_child(player_flag)
 	info_label = _label("", 15, Color("#e9e4d7")); info_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; info_label.size_flags_vertical = Control.SIZE_EXPAND_FILL; leftbox.add_child(info_label)
 	var diplomacy := _button("DIPLOMACY"); diplomacy.pressed.connect(func(): _notice("Diplomacy", "International relations are developing.")); leftbox.add_child(diplomacy)
 	var economy := _button("ECONOMY"); economy.pressed.connect(func(): _notice("National economy", "Build infrastructure and manage the national budget.")); leftbox.add_child(economy)
 	var military := _button("MILITARY"); military.pressed.connect(func(): _notice("Armed forces", "Strategic units will be added in a later campaign update.")); leftbox.add_child(military)
-	var center := VBoxContainer.new(); center.size_flags_horizontal = Control.SIZE_EXPAND_FILL; center.size_flags_vertical = Control.SIZE_EXPAND_FILL; center.add_theme_constant_override("separation", 0); body.add_child(center)
+	var center := VBoxContainer.new(); center.size_flags_horizontal = Control.SIZE_EXPAND_FILL; center.add_theme_constant_override("separation", 0); body.add_child(center)
 	var map_frame := PanelContainer.new(); map_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL; map_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL; map_frame.add_theme_stylebox_override("panel", _style(Color("#071521"), Color("#294451"))); center.add_child(map_frame)
-	map_view = MapView.new(); map_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL; map_view.size_flags_vertical = Control.SIZE_EXPAND_FILL; map_view.load_world(world); map_view.set_owners(state.owners); map_view.set_state_colors(_state_color_table()); map_view.territory_clicked.connect(_on_territory_clicked); map_frame.add_child(map_view)
+	map_view = MapView.new(); map_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL; map_view.size_flags_vertical = Control.SIZE_EXPAND_FILL; map_view.load_world(world); map_view.set_owners(state.owners); map_view.set_state_colors(_state_color_table()); map_view.territory_clicked.connect(_on_territory_clicked); map_view.deep_layer_requested.connect(_load_deep_layer); map_view.zoom_changed.connect(_on_zoom_changed); map_frame.add_child(map_view)
 	var bottom := _panel(PANEL); bottom.custom_minimum_size.y = 54; center.add_child(bottom)
 	var tools := HBoxContainer.new(); tools.add_theme_constant_override("separation", 9); bottom.add_child(tools)
 	selection_label = _label("Select territories • Shift-click to add or remove", 14, MUTED); selection_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL; tools.add_child(selection_label)
 	var create := _button("FOUND NEW STATE"); create.pressed.connect(_create_state_dialog); tools.add_child(create)
 	var next := _button("END TURN  ▶"); next.add_theme_stylebox_override("normal", _style(Color("#604b2c"), GOLD)); next.pressed.connect(_next_turn); tools.add_child(next)
-	var right := _panel(PANEL); right.custom_minimum_size.x = 275; right.size_flags_vertical = Control.SIZE_EXPAND_FILL; body.add_child(right)
-	var rbox := VBoxContainer.new(); rbox.add_theme_constant_override("separation", 12); right.add_child(rbox)
+	var right := _panel(PANEL); right.custom_minimum_size.x = 275; body.add_child(right)
+	var rightscroll := ScrollContainer.new(); rightscroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; rightscroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL; right.add_child(rightscroll)
+	var rbox := VBoxContainer.new(); rbox.add_theme_constant_override("separation", 12); rbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL; rightscroll.add_child(rbox)
 	rbox.add_child(_label("TERRITORY DOSSIER", 13, GOLD))
 	var detail := _label("Click a country to inspect it.\n\nHold Shift and click to assemble a new state from multiple territories.\n\nWheel: zoom\nDrag: pan", 15, Color("#d8e0de")); detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; detail.size_flags_vertical = Control.SIZE_EXPAND_FILL; rbox.add_child(detail)
 	var annex := _button("ANNEX FOR PLAYER"); annex.pressed.connect(func(): _set_selected_owner(state.player, "annexed")); rbox.add_child(annex)
 	var occupy := _button("PLACE UNDER OCCUPATION"); occupy.pressed.connect(func(): _set_selected_owner(state.player, "occupied")); rbox.add_child(occupy)
 	var release := _button("RESTORE ORIGINAL OWNER"); release.pressed.connect(_restore_selected); rbox.add_child(release)
-	var eventlog := _label("LATEST  •  " + str(state.logs.back()), 12, MUTED); eventlog.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; eventlog.custom_minimum_size.y = 36; root.add_child(eventlog)
+	var eventlog := _label("LATEST  •  " + str(state.logs.back()), 12, MUTED); eventlog.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE); eventlog.offset_top = -36; eventlog.custom_minimum_size.y = 36; add_child(eventlog)
 	_refresh_header()
 	map_view.set_meta("detail", detail)
 	map_view.territory_clicked.connect(func(id, _add): _show_region_detail(id, detail))
@@ -160,10 +141,13 @@ func _on_territory_clicked(id: String, additive: bool) -> void:
 
 func _show_region_detail(id: String, detail: Label) -> void:
 	var f: Dictionary = _feature(id)
-	var owner: String = str(state.owners.get(id, id))
+	var owner := _owner_of(id, f)
 	var c: Dictionary = state.countries.get(owner, {"name": f.name, "budget": 0, "population": 0, "stability": 50, "government": "Unknown"})
 	var status := str(state.statuses.get(id, "National territory"))
-	detail.text = "%s\n\nOwner: %s\nStatus: %s\nPopulation: %.1f M\nTreasury: %.0f¤\nStability: %d%%\n\nSelect several territories with Shift-click, then found a new state." % [f.name, c.name, status, float(c.population), float(c.budget), int(c.stability)]
+	var metadata: Dictionary = MapData.metadata_for(str(f.get("country_code", id)), int(f.get("admin_level", 0)))
+	var boundary_source := "geoBoundaries gbOpen · date varies by source"
+	if not metadata.is_empty(): boundary_source = "geoBoundaries gbOpen · reference %s · source updated %s" % [str(metadata.get("year", "unknown")), str(metadata.get("source_updated", "unknown"))]
+	detail.text = "%s\n\nOwner: %s\nStatus: %s\nPopulation: %.1f M\nTreasury: %.0f¤\nStability: %d%%\n\nBoundary: %s\n\nSelect several territories with Shift-click, then found a new state." % [f.get("name", id), c.name, status, float(c.population), float(c.budget), int(c.stability), boundary_source]
 
 func _set_selected_owner(owner: String, status: String) -> void:
 	if map_view.selected.is_empty(): return
@@ -175,7 +159,10 @@ func _set_selected_owner(owner: String, status: String) -> void:
 
 func _restore_selected() -> void:
 	for id in map_view.selected:
-		state.owners[id] = id; state.statuses.erase(id)
+		var f := _feature(id)
+		if int(f.get("admin_level", 0)) == 0: state.owners[id] = id
+		else: state.owners.erase(id)
+		state.statuses.erase(id)
 	map_view.set_owners(state.owners); update_overview()
 
 func _create_state_dialog() -> void:
@@ -274,14 +261,36 @@ func _show_saves() -> void:
 	back.pressed.connect(_show_title)
 
 func _feature(id: String) -> Dictionary:
-	for f in world:
-		if f.id == id: return f
-	return {"name": id}
+	return MapData.feature_by_id(id)
 
 func _country_for(id: String) -> Dictionary:
-	for f in world:
-		if f.id == id: return f
-	return {}
+	var f := _feature(id)
+	if f.is_empty(): return {}
+	var code := str(f.get("country_code", id))
+	return MapData.feature_by_id(code)
+
+func _owner_of(id: String, feature: Dictionary = {}) -> String:
+	if state.owners.has(id): return str(state.owners[id])
+	if feature.is_empty(): feature = _feature(id)
+	var parent := str(feature.get("parent_id", ""))
+	while not parent.is_empty():
+		if state.owners.has(parent): return str(state.owners[parent])
+		var parent_feature := _feature(parent)
+		if parent_feature.is_empty(): break
+		parent = str(parent_feature.get("parent_id", ""))
+	var country := str(feature.get("country_code", id))
+	return str(state.owners.get(country, country))
+
+func _on_zoom_changed(value: float) -> void:
+	for level in [1, 2]:
+		var threshold := 1.55 if level == 1 else 3.6
+		if value >= threshold and not loaded_levels.has(level):
+			loaded_levels[level] = true
+			map_view.set_level_data(level, MapData.load_layer(level))
+
+func _load_deep_layer(country_code: String) -> void:
+	var result := MapData.load_deepest_country(country_code)
+	if not result.is_empty(): map_view.set_deep_country_data(country_code, int(result.level), result.features)
 
 func _state_color_table() -> Dictionary:
 	var result := {}
