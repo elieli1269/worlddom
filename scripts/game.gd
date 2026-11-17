@@ -13,6 +13,13 @@ const PANEL_ALT := Color("#162f3d")
 const GOLD := Color("#d9b56c")
 const MUTED := Color("#91a6ad")
 
+const EUROPE_CODES := [
+	"FRA", "GBR", "DEU", "ITA", "ESP", "PRT", "RUS", "AUT", "POL", "BEL", 
+	"NLD", "CHE", "SWE", "NOR", "DNK", "FIN", "IRL", "CZE", "HUN", "ROU", 
+	"BGR", "GRC", "SRB", "UKR", "BLR", "EST", "LVA", "LTU", "LUX"
+]
+
+var full_world: Array = []
 var world: Array = []
 var state := {}
 var map_view: WorldMap
@@ -20,6 +27,7 @@ var info_label: Label
 var header_label: Label
 var selection_label: Label
 var country_option: OptionButton
+var campaign_mode_option: OptionButton
 var current_panel: PanelContainer
 var loaded_levels: Dictionary = {0: true}
 var right_container: VBoxContainer
@@ -36,7 +44,8 @@ func _ready() -> void:
 	_show_title()
 
 func _load_world() -> void:
-	world = MapData.load_layer(0)
+	full_world = MapData.load_layer(0)
+	world = full_world
 
 func _show_title() -> void:
 	_clear()
@@ -48,44 +57,88 @@ func _show_title() -> void:
 	add_child(backdrop)
 	var shade := ColorRect.new(); shade.color = Color(0.015, 0.035, 0.05, 0.33); shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(shade)
 	var root := VBoxContainer.new()
-	root.position = Vector2(104, 90)
-	root.size = Vector2(590, 720)
-	root.add_theme_constant_override("separation", 13)
+	root.position = Vector2(104, 80)
+	root.size = Vector2(620, 750)
+	root.add_theme_constant_override("separation", 12)
 	add_child(root)
-	var eyebrow := _label("GRAND STRATEGY & WARFARE  •  TACTICAL CAMPAIGN", 14, GOLD)
+
+	var eyebrow := _label("GRAND STRATEGY & TACTICAL WARFARE", 14, GOLD)
 	root.add_child(eyebrow)
 	var seal := TextureRect.new(); seal.texture = load("res://assets/ui/crown_seal.svg"); seal.custom_minimum_size = Vector2(58, 58); seal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; seal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; root.add_child(seal)
-	var title := _label("WORLD\nDOMINION", 58, Color("#f4ead3"))
+	var title := _label("WORLD\nDOMINION", 54, Color("#f4ead3"))
 	root.add_child(title)
-	var sub := _label("Tactical warfare, real army regiments, cities and generals.", 17, MUTED)
+	var sub := _label("Choisissez votre théâtre : Campagne d'Europe ou Mondiale.", 16, MUTED)
 	root.add_child(sub)
 	var rule := _panel(PANEL_ALT); rule.custom_minimum_size.y = 2; root.add_child(rule)
-	var start := _button("COMMENCER UNE NOUVELLE CAMPAGNE")
-	root.add_child(start)
-	root.add_child(_label("Choisissez la nation que vous dirigerez :", 14, MUTED))
+
+	# Mode Selection
+	root.add_child(_label("Mode de jeu :", 14, GOLD))
+	campaign_mode_option = OptionButton.new()
+	campaign_mode_option.custom_minimum_size.y = 42
+	campaign_mode_option.add_theme_font_size_override("font_size", 16)
+	campaign_mode_option.add_theme_color_override("font_color", Color("#f1e8d4"))
+	campaign_mode_option.add_theme_stylebox_override("normal", _style(PANEL_ALT, GOLD))
+	campaign_mode_option.add_item("THÉÂTRE D'EUROPE (Guerres Européennes • Mémoire Optimisée)")
+	campaign_mode_option.add_item("CAMPAGNE MONDIALE (Carte Planétaire Complète)")
+	campaign_mode_option.select(0)
+	root.add_child(campaign_mode_option)
+
+	# Country Selection
+	root.add_child(_label("Nation sous votre commandement :", 14, GOLD))
 	country_option = OptionButton.new()
-	country_option.custom_minimum_size.y = 44
-	country_option.add_theme_font_size_override("font_size", 17)
+	country_option.custom_minimum_size.y = 42
+	country_option.add_theme_font_size_override("font_size", 16)
 	country_option.add_theme_color_override("font_color", Color("#f1e8d4"))
 	country_option.add_theme_stylebox_override("normal", _style(PANEL_ALT, GOLD))
-	var default_index := 0
-	for i in world.size():
-		country_option.add_item(world[i].name)
-		if world[i].id == "FRA": default_index = i
-	country_option.select(default_index)
 	root.add_child(country_option)
+
+	_populate_countries_list(true)
+	campaign_mode_option.item_selected.connect(func(idx: int): _populate_countries_list(idx == 0))
+
+	var start := _button("LANCER LA CAMPAGNE  ▶")
+	start.add_theme_stylebox_override("normal", _style(Color("#604b2c"), GOLD))
+	root.add_child(start)
+
 	var resume := _button("CHARGER UNE SAUVEGARDE")
 	root.add_child(resume)
 	var quit := _button("QUITTER LE JEU")
 	root.add_child(quit)
-	root.add_child(_label("WORLD DOMINION  •  TACTICAL WARFARE EDITION", 11, Color("#9a8b6c")))
+	root.add_child(_label("WORLD DOMINION  •  EUROPEAN THEATRE EDITION", 11, Color("#9a8b6c")))
+
 	start.pressed.connect(_new_game)
 	resume.pressed.connect(_show_saves)
 	quit.pressed.connect(func(): get_tree().quit())
 
+func _populate_countries_list(europe_only: bool) -> void:
+	country_option.clear()
+	var default_index := 0
+	var idx := 0
+	for f in full_world:
+		var code: String = str(f.get("country_code", f.id)).to_upper()
+		if europe_only and not EUROPE_CODES.has(code):
+			continue
+		country_option.add_item("%s (%s)" % [str(f.name), code])
+		country_option.set_item_metadata(idx, f.id)
+		if code == "FRA":
+			default_index = idx
+		idx += 1
+	country_option.select(default_index)
+
 func _new_game() -> void:
-	var idx := country_option.selected
-	var chosen: Dictionary = world[idx]
+	var is_europe_mode: bool = campaign_mode_option.selected == 0
+	var selected_meta: Variant = country_option.get_item_metadata(country_option.selected)
+	var player_country_id: String = str(selected_meta) if selected_meta != null else "FRA"
+
+	# Memory Optimization: In Europe mode, keep ONLY European countries in memory!
+	if is_europe_mode:
+		world = []
+		for f in full_world:
+			var code: String = str(f.get("country_code", f.id)).to_upper()
+			if EUROPE_CODES.has(code):
+				world.append(f)
+	else:
+		world = full_world
+
 	var owners := {}
 	var countries := {}
 	for f in world:
@@ -102,22 +155,27 @@ func _new_game() -> void:
 			"color": Color.from_hsv(float(abs(f.id.hash()) % 100) / 100.0, 0.45, 0.78).to_html(false)
 		}
 
-	# Initialize Cities
-	var cities: Array = CityLib.get_default_cities().duplicate(true)
-	for c in cities:
-		c["owner"] = owners.get(c.country_code, c.country_code)
+	# Initialize Cities (filtered by theatre for memory and speed)
+	var cities: Array = []
+	for c in CityLib.get_default_cities():
+		var code: String = str(c.country_code).to_upper()
+		if is_europe_mode and not EUROPE_CODES.has(code):
+			continue
+		var city_copy: Dictionary = c.duplicate(true)
+		city_copy["owner"] = owners.get(c.country_code, c.country_code)
+		cities.append(city_copy)
 
-	# Initialize Divisions matching the European War screenshot aesthetic
+	# Initialize Divisions
 	var units: Array = []
 
-	# French forces (Metz, Nancy, Paris)
+	# French Forces (Metz, Nancy, Paris)
 	units.append(MilitaryLib.create_unit("artillery", "FRA", 6.17, 49.12, "Artillerie Lourde de Metz", "METZ", true, "Général"))
 	units.append(MilitaryLib.create_unit("infantry", "FRA", 6.30, 48.95, "5e Div. Fusiliers de Metz", "METZ"))
 	units.append(MilitaryLib.create_unit("cavalry", "FRA", 6.18, 48.69, "4e Régiment de Cuirassiers", "NANCY"))
-	units.append(MilitaryLib.create_unit("infantry", "FRA", 2.35, 48.86, "Garde Impériale de Paris", "PARIS", true, "Maréchal"))
+	units.append(MilitaryLib.create_unit("infantry", "FRA", 2.35, 48.86, "Garde Impériale de Paris", "PARIS", true, "Napoléon"))
 	units.append(MilitaryLib.create_unit("artillery", "FRA", 2.50, 48.70, "Batterie d'Artillerie de Paris", "PARIS"))
 
-	# German / Saxon / Prussian forces (Karlsruhe, Weilburg, Jena, Wiesbaden, Berlin)
+	# German / Prussian Forces (Karlsruhe, Weilburg, Jena, Wiesbaden, Berlin)
 	units.append(MilitaryLib.create_unit("cavalry", "DEU", 8.40, 49.01, "Garde de Cavalerie de Karlsruhe", "KARLSRUHE", true, "Blücher"))
 	units.append(MilitaryLib.create_unit("infantry", "DEU", 8.55, 48.92, "7e Régiment Grenadiers", "KARLSRUHE"))
 	units.append(MilitaryLib.create_unit("artillery", "DEU", 8.26, 50.49, "Artillerie de Campagne Weilburg", "WEILBURG"))
@@ -125,22 +183,21 @@ func _new_game() -> void:
 	units.append(MilitaryLib.create_unit("infantry", "DEU", 11.59, 50.93, "Infanterie de Ligne Jena", "JENA", true, "Braunschweig"))
 	units.append(MilitaryLib.create_unit("artillery", "DEU", 11.75, 50.85, "Batterie Royale de Jena", "JENA"))
 	units.append(MilitaryLib.create_unit("infantry", "DEU", 13.40, 52.52, "Garde Royale de Berlin", "BERLIN", true, "Général d'Armée"))
-	units.append(MilitaryLib.create_unit("armor", "DEU", 13.55, 52.38, "Brigade Blindée de Berlin", "BERLIN"))
 
-	# Other Major World Nations starting forces
+	# British & Russian European forces
 	units.append(MilitaryLib.create_unit("infantry", "GBR", -0.12, 51.51, "Royal Coldstream Guards", "LONDON", true, "Wellington"))
 	units.append(MilitaryLib.create_unit("artillery", "GBR", 0.05, 51.40, "Royal Horse Artillery", "LONDON"))
 	units.append(MilitaryLib.create_unit("infantry", "RUS", 37.62, 55.76, "Garde Impériale de Moscou", "MOSKVA", true, "Koutouzov"))
 	units.append(MilitaryLib.create_unit("artillery", "RUS", 37.80, 55.65, "Artillerie Lourde de Moscou", "MOSKVA"))
 	units.append(MilitaryLib.create_unit("cavalry", "RUS", 30.36, 59.93, "Cosaques de Leningrad", "LENINGRAD"))
 	units.append(MilitaryLib.create_unit("infantry", "ITA", 12.50, 41.90, "Légion de Rome", "ROMA"))
-	units.append(MilitaryLib.create_unit("infantry", "USA", -77.04, 38.91, "1st Continental Infantry", "WASHINGTON", true, "General"))
-	units.append(MilitaryLib.create_unit("cavalry", "USA", -77.20, 38.80, "US Cavalry Regiment", "WASHINGTON"))
+	units.append(MilitaryLib.create_unit("infantry", "ESP", -3.70, 40.42, "Régiment Royal de Madrid", "MADRID"))
 
 	state = {
 		"turn": 1,
 		"year": 1805,
-		"player": chosen.id,
+		"player": player_country_id,
+		"campaign_mode": "europe" if is_europe_mode else "world",
 		"owners": owners,
 		"countries": countries,
 		"statuses": {},
@@ -149,7 +206,7 @@ func _new_game() -> void:
 		"units": units,
 		"selected_unit": "",
 		"selected_city": "",
-		"logs": ["La campagne débute ! Les armées et généraux sont en position sur le théâtre européen."],
+		"logs": ["La campagne d'Europe 1805 débute. Zoom initial tactique sur la France et le front."],
 		"next_state": 1
 	}
 	_show_game()
@@ -174,9 +231,9 @@ func _show_game() -> void:
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(bar)
 
-	# Brand / Title
 	var compass := TextureRect.new(); compass.texture = load("res://assets/ui/compass_rose.svg"); compass.custom_minimum_size = Vector2(36, 36); compass.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; compass.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; bar.add_child(compass)
-	var brand := _label("WORLD DOMINION", 18, GOLD)
+	var mode_title := "EUROPE" if str(state.get("campaign_mode", "europe")) == "europe" else "WORLD"
+	var brand := _label("WORLD DOMINION  •  %s" % mode_title, 18, GOLD)
 	bar.add_child(brand)
 
 	# Tactical Resource Badges (Gold, Wrench/Industry, Rations/Manpower)
@@ -247,9 +304,9 @@ func _show_game() -> void:
 	map_view.set_cities(state.cities)
 	map_view.set_units(state.units)
 
-	# Center view on French/German front at startup
-	map_view.pan = -Vector2(7.2, 49.5)
-	map_view.zoom = 3.6
+	# DIRECTEMENT AU DÉBUT : ON EST SUR LA FRANCE EN ZOOM TACTIQUE !
+	map_view.pan = -Vector2(4.8, 48.6)
+	map_view.zoom = 4.2
 
 	# Signals
 	map_view.territory_clicked.connect(_on_territory_clicked)
@@ -285,7 +342,7 @@ func _show_game() -> void:
 func _show_default_right_panel() -> void:
 	_clear_container(right_container)
 	right_container.add_child(_label("ORDRES ET ÉTAT-MAJOR", 13, GOLD))
-	var desc := _label("COMMANDES TACTIQUES :\n\n• Cliquez sur vos soldats, cavaliers, chars ou artillerie pour les sélectionner.\n• Clic droit ou clic destination sur la carte pour déplacer ou attaquer !\n• Cliquez sur une VILLE pour recruter des régiments d'infanterie, batteries d'artillerie et cavalerie.\n• Molette : zoom\n• Glisser : déplacer la carte", 14, Color("#d8e0de"))
+	var desc := _label("COMMANDES TACTIQUES :\n\n• Cliquez sur vos soldats, cavaliers, chars ou artillerie pour les commander.\n• Clic droit ou clic destination sur la carte pour déplacer ou attaquer !\n• Cliquez sur une VILLE pour recruter des régiments d'infanterie, batteries d'artillerie et cavalerie.\n• Molette : zoom\n• Glisser : déplacer la carte", 14, Color("#d8e0de"))
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	right_container.add_child(desc)
 
@@ -632,7 +689,7 @@ func _show_military_dialog() -> void:
 		locate_btn.custom_minimum_size = Vector2(70, 28)
 		locate_btn.pressed.connect(func():
 			map_view.pan = -Vector2(float(u.lon), float(u.lat))
-			map_view.zoom = 3.6
+			map_view.zoom = 4.2
 			map_view.select_unit(str(u.id))
 			_on_unit_clicked(str(u.id))
 			d.queue_free()
@@ -689,7 +746,7 @@ func _next_turn() -> void:
 	elif not state.selected_city.is_empty(): _show_city_detail(state.selected_city)
 
 func _execute_ai_turns() -> void:
-	var majors := ["DEU", "RUS", "GBR", "FRA", "ITA", "USA"]
+	var majors := ["DEU", "RUS", "GBR", "FRA", "ITA", "ESP"]
 	for id in majors:
 		if id == state.player: continue
 		if not state.countries.has(id): continue
@@ -859,13 +916,13 @@ func update_overview() -> void:
 	for city in state.get("cities", []):
 		if str(city.get("owner", city.country_code)) == state.player: city_count += 1
 
-	info_label.text = "%s\n%s\n\nTRÉSOR DE GUERRE\n%.0f Or\n\nPRODUCTION INDUSTRIELLE\n%.0f Usines\n\nRAVITAILLEMENT\n%.0f Hommes\n\nPOPULATION NATIONALE\n%.1f millions\n\nTERRITOIRES & PROVINCES\n%d\n\nVILLES & FORTERESSES\n%d\n\nRÉGIMENTS ACTIFS\n%d\n\nSTABILITÉ\n%d%%\n\n────────────────\nCampagne : Année %d" % [
-		c.name.to_upper(), "NATION SOUS VOTRE COMMANDEMENT", c.budget, float(c.get("industry", 145)), float(c.get("manpower", 1390)), c.population, count, city_count, army_count, c.stability, state.year
+	info_label.text = "%s\n%s\n\nTRÉSOR DE GUERRE\n%.0f Or\n\nPRODUCTION INDUSTRIELLE\n%.0f Usines\n\nRAVITAILLEMENT\n%.0f Hommes\n\nPOPULATION\n%.1f millions\n\nTERRITOIRES & PROVINCES\n%d\n\nVILLES & FORTERESSES\n%d\n\nRÉGIMENTS ACTIFS\n%d\n\nSTABILITÉ NATIONALE\n%d%%\n\n────────────────\nThéâtre : %s" % [
+		c.name.to_upper(), "NATION SOUS VOTRE COMMANDEMENT", c.budget, float(c.get("industry", 145)), float(c.get("manpower", 1390)), c.population, count, city_count, army_count, c.stability, "Europe (1805)" if str(state.get("campaign_mode", "europe")) == "europe" else "Mondial"
 	]
 
 func _save_dialog() -> void:
 	var d := ConfirmationDialog.new(); d.title = "Sauvegarder la campagne"; d.ok_button_text = "SAUVEGARDER"
-	var input := LineEdit.new(); input.text = "Campagne %d" % state.year; input.custom_minimum_size.x = 300; d.add_child(input); add_child(d)
+	var input := LineEdit.new(); input.text = "Campagne %s %d" % [str(state.get("campaign_mode", "europe")).capitalize(), state.year]; input.custom_minimum_size.x = 300; d.add_child(input); add_child(d)
 	d.confirmed.connect(func(): _save_game(input.text.strip_edges()); d.queue_free())
 	d.canceled.connect(func(): d.queue_free())
 	d.popup_centered()
@@ -904,6 +961,14 @@ func _show_saves() -> void:
 					state = parsed
 					if not state.has("cities"): state["cities"] = CityLib.get_default_cities().duplicate(true)
 					if not state.has("units"): state["units"] = []
+					# Load appropriate map layer according to saved mode
+					if str(state.get("campaign_mode", "europe")) == "europe":
+						world = []
+						for f_feat in full_world:
+							var code: String = str(f_feat.get("country_code", f_feat.id)).to_upper()
+							if EUROPE_CODES.has(code): world.append(f_feat)
+					else:
+						world = full_world
 					_show_game()
 	)
 	delete_btn.pressed.connect(func():
@@ -937,7 +1002,16 @@ func _on_zoom_changed(value: float) -> void:
 		var threshold := 1.55 if level == 1 else 3.6
 		if value >= threshold and not loaded_levels.has(level):
 			loaded_levels[level] = true
-			map_view.set_level_data(level, MapData.load_layer(level))
+			var loaded_features := MapData.load_layer(level)
+			# In Europe mode: filter out non-European regional subdivisions for memory optimization
+			if str(state.get("campaign_mode", "europe")) == "europe":
+				var filtered_features: Array = []
+				for f in loaded_features:
+					var c_code: String = str(f.get("country_code", "")).to_upper()
+					if EUROPE_CODES.has(c_code): filtered_features.append(f)
+				map_view.set_level_data(level, filtered_features)
+			else:
+				map_view.set_level_data(level, loaded_features)
 
 func _load_deep_layer(country_code: String) -> void:
 	var result := MapData.load_deepest_country(country_code)
