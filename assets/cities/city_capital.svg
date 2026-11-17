@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Glowing aura -->
+  <circle cx="24" cy="24" r="22" fill="#2c2210" stroke="#f0c85d" stroke-width="2"/>
+  <circle cx="24" cy="24" r="18.5" fill="#131e26" stroke="#997834" stroke-width="1.2"/>
+  
+  <!-- Laurel wreath branches left and right -->
+  <path d="M11 28 C9 22, 12 16, 17 12 C16 16, 17 21, 20 23" fill="none" stroke="#d5b364" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M37 28 C39 22, 36 16, 31 12 C32 16, 31 21, 28 23" fill="none" stroke="#d5b364" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Golden 5-pointed Capital Star -->
+  <polygon points="24,8 27.8,17.2 37.8,18.1 30.2,24.7 32.4,34.5 24,29.4 15.6,34.5 17.8,24.7 10.2,18.1 20.2,17.2"
+           fill="#f7d46b" stroke="#94742a" stroke-width="1.5" stroke-linejoin="round"/>
+  
+  <!-- Inner star facet shading -->
+  <polygon points="24,8 24,29.4 20.2,17.2" fill="#ffeaa5"/>
+  <polygon points="24,29.4 30.2,24.7 37.8,18.1 27.8,17.2" fill="#d9b143"/>
+  <polygon points="24,29.4 15.6,34.5 17.8,24.7" fill="#c79c32"/>
+  <polygon points="24,29.4 32.4,34.5" fill="#ffeaa5"/>
+  
+  <!-- Center gem -->
+  <circle cx="24" cy="22" r="2.5" fill="#fff" stroke="#d5b364" stroke-width="1"/>
+</svg>

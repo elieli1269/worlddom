@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Round city token background -->
+  <circle cx="24" cy="24" r="21" fill="#13232c" stroke="#879da8" stroke-width="2"/>
+  <circle cx="24" cy="24" r="17.5" fill="#1b2f3a" stroke="#4d6775" stroke-width="1"/>
+
+  <!-- Urban silhouette / towers / citadel -->
+  <!-- Left factory / industrial tower with window slit -->
+  <rect x="13" y="24" width="5" height="11" fill="#4d6470" stroke="#a0b5c0" stroke-width="0.8"/>
+  <polygon points="13,24 15.5,21 18,24" fill="#a0b5c0"/>
+
+  <!-- Center Grand Dome / Cathedral / City Hall -->
+  <rect x="19.5" y="22" width="9" height="13" fill="#698694" stroke="#d5b364" stroke-width="0.8"/>
+  <!-- Dome top -->
+  <path d="M19.5 22 C19.5 16, 28.5 16, 28.5 22 Z" fill="#d5b364" stroke="#ffeaa5" stroke-width="0.8"/>
+  <line x1="24" y1="13" x2="24" y2="16" stroke="#ffeaa5" stroke-width="1.2"/>
+  <circle cx="24" cy="13" r="1" fill="#ffeaa5"/>
+
+  <!-- Right tall building / clock tower -->
+  <rect x="29.5" y="19" width="6" height="16" fill="#546e7b" stroke="#a0b5c0" stroke-width="0.8"/>
+  <polygon points="29.5,19 32.5,16 35.5,19" fill="#a0b5c0"/>
+  <circle cx="32.5" cy="22" r="1.2" fill="#ffeaa5"/>
+
+  <!-- Ground rampart / defense wall -->
+  <rect x="11" y="34" width="26" height="3" fill="#364952" stroke="#879da8" stroke-width="0.8"/>
+  <!-- Wall crenellations -->
+  <rect x="12" y="32" width="2" height="2" fill="#879da8"/>
+  <rect x="17" y="32" width="2" height="2" fill="#879da8"/>
+  <rect x="22" y="32" width="2" height="2" fill="#879da8"/>
+  <rect x="27" y="32" width="2" height="2" fill="#879da8"/>
+  <rect x="32" y="32" width="2" height="2" fill="#879da8"/>
+</svg>

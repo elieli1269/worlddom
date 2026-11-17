@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="72" viewBox="0 0 96 72">
+  <!-- Isometric ground base shadow -->
+  <ellipse cx="48" cy="54" rx="42" ry="16" fill="#000000" opacity="0.28"/>
+  
+  <!-- Left Building (residential row house) -->
+  <polygon points="14,44 26,36 38,44 26,52" fill="#d9534f"/> <!-- Roof top facet -->
+  <polygon points="14,44 26,52 26,62 14,54" fill="#eed9b8"/> <!-- Front wall -->
+  <polygon points="26,52 38,44 38,54 26,62" fill="#d3be9c"/> <!-- Side wall -->
+  <!-- Windows & Door -->
+  <rect x="17" y="47" width="3" height="4" fill="#30475e"/>
+  <rect x="21" y="49" width="3" height="4" fill="#30475e"/>
+  <rect x="29" y="49" width="4" height="4" fill="#30475e"/>
+
+  <!-- Back Church / Cathedral / City Hall with Spire -->
+  <polygon points="40,24 48,18 56,24 48,30" fill="#a03b38"/> <!-- High roof -->
+  <polygon points="40,24 48,30 48,48 40,42" fill="#e8dac1"/>
+  <polygon points="48,30 56,24 56,42 48,48" fill="#cbbfa9"/>
+  <!-- Cathedral Tower & Bell Spire -->
+  <polygon points="45,18 48,4 51,18" fill="#5c6f84" stroke="#e0ca92" stroke-width="0.8"/> <!-- Golden spire -->
+  <circle cx="48" cy="3" r="1.5" fill="#f4d160"/> <!-- Cross/Gilding top -->
+  <!-- Stained glass arch -->
+  <path d="M43 32 Q44 28 45 32 Z" fill="#4d80e4"/>
+
+  <!-- Right Building with Red Gambrel Roof -->
+  <polygon points="56,42 70,33 82,42 68,51" fill="#c0392b"/>
+  <polygon points="56,42 68,51 68,61 56,52" fill="#f3e5ab"/>
+  <polygon points="68,51 82,42 82,52 68,61" fill="#d1c390"/>
+  <!-- Chimney with soft smoke -->
+  <rect x="74" y="32" width="3" height="7" fill="#8c3327"/>
+  <circle cx="76" cy="28" r="2.5" fill="#ffffff" opacity="0.45"/>
+  <circle cx="78" cy="23" r="3.5" fill="#ffffff" opacity="0.3"/>
+
+  <!-- Front Center Workshop / Manor -->
+  <polygon points="34,49 46,41 58,49 46,57" fill="#b84534"/>
+  <polygon points="34,49 46,57 46,66 34,58" fill="#f8f1e5"/>
+  <polygon points="46,57 58,49 58,58 46,66" fill="#ded7ca"/>
+  <rect x="44" y="60" width="4" height="6" fill="#5a3d28"/> <!-- Wooden door -->
+  <rect x="37" y="53" width="3" height="4" fill="#38598b"/>
+
+  <!-- Cobblestone details -->
+  <ellipse cx="48" cy="65" rx="8" ry="3" fill="#8797a1" opacity="0.5"/>
+</svg>

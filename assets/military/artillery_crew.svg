@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="76" viewBox="0 0 96 76">
+  <!-- Ground Shadow -->
+  <ellipse cx="48" cy="68" rx="40" ry="7" fill="#000000" opacity="0.32"/>
+
+  <!-- Gunner Soldier standing behind / beside the cannon -->
+  <g transform="translate(16, 14)">
+    <!-- Ramrod / swab held in hand -->
+    <line x1="1" y1="48" x2="1" y2="4" stroke="#8c7b64" stroke-width="2"/>
+    <rect x="-0.5" y="4" width="3" height="6" fill="#2c3e50"/> <!-- Rammer head -->
+    <!-- Legs -->
+    <rect x="7" y="38" width="4" height="16" fill="#2c3e50"/>
+    <rect x="12" y="38" width="4" height="16" fill="#1e272e"/>
+    <!-- Blue Coat with Red Cuffs/Facings (Artillery color) -->
+    <path d="M5 20 L18 20 L17 39 L6 39 Z" fill="#192a56"/>
+    <rect x="4" y="24" width="2.5" height="5" fill="#e74c3c"/> <!-- Red collar -->
+    <rect x="16.5" y="24" width="2.5" height="5" fill="#e74c3c"/>
+    <line x1="6" y1="21" x2="16" y2="38" stroke="#ffffff" stroke-width="1.5"/>
+    <!-- Head & Shako with red pompon -->
+    <circle cx="11.5" cy="15" r="3.8" fill="#f5cd79"/>
+    <rect x="8.5" y="6" width="6.5" height="8.5" fill="#1e272e"/>
+    <circle cx="11.5" cy="4" r="2" fill="#e74c3c"/>
+  </g>
+
+  <!-- CANNON CARRIAGE AND BARREL -->
+  <!-- Trail / Wooden carriage frame -->
+  <polygon points="32,60 56,48 58,54 36,65" fill="#6d5336" stroke="#3d2c1c" stroke-width="0.8"/>
+  <circle cx="34" cy="62" r="2.5" fill="#2f3640"/>
+
+  <!-- Heavy Bronze / Steel Gun Barrel (pointed upward to right) -->
+  <!-- Breech knob / cascabel -->
+  <circle cx="44" cy="52" r="3.5" fill="#b08d4b"/>
+  <!-- Main Tube Body -->
+  <polygon points="45,49 84,28 86,34 47,55" fill="#cfa858" stroke="#7a5d24" stroke-width="0.8"/>
+  <polygon points="47,48 84,28 85,30 48,50" fill="#f7e19e"/> <!-- Specular highlight -->
+  <!-- Muzzle muzzle ring -->
+  <polygon points="83,26 89,23 91,28 85,31" fill="#dfbe6c" stroke="#684e1b" stroke-width="0.8"/>
+  <!-- Trunnion band -->
+  <rect x="58" y="40" width="4" height="6" fill="#4a3715"/>
+
+  <!-- Large Spoked Artillery Wheel -->
+  <g transform="translate(56, 52)">
+    <circle cx="0" cy="0" r="16" fill="#4b3823" stroke="#2c1e10" stroke-width="2.5"/> <!-- Iron Rim -->
+    <circle cx="0" cy="0" r="13.5" fill="#6d5336" stroke="#2c1e10" stroke-width="1"/>
+    <!-- Spokes -->
+    <line x1="0" y1="-14" x2="0" y2="14" stroke="#2c1e10" stroke-width="2"/>
+    <line x1="-14" y1="0" x2="14" y2="0" stroke="#2c1e10" stroke-width="2"/>
+    <line x1="-10" y1="-10" x2="10" y2="10" stroke="#2c1e10" stroke-width="2"/>
+    <line x1="-10" y1="10" x2="10" y2="-10" stroke="#2c1e10" stroke-width="2"/>
+    <!-- Hub cap -->
+    <circle cx="0" cy="0" r="4.5" fill="#2f3640" stroke="#e0ca92" stroke-width="1"/>
+  </g>
+
+  <!-- Ready ammunition cannonball / ammo crate -->
+  <circle cx="78" cy="64" r="3" fill="#2c3e50"/>
+  <circle cx="83" cy="64" r="3" fill="#1e272e"/>
+  <circle cx="80.5" cy="60" r="3" fill="#34495e"/>
+</svg>

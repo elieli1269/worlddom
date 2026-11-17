@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Outer Gold Laurel Frame -->
+  <circle cx="24" cy="24" r="23" fill="#1e272e" stroke="#f1c40f" stroke-width="2.5"/>
+  <circle cx="24" cy="24" r="20" fill="#2d3436" stroke="#e67e22" stroke-width="1"/>
+  
+  <!-- Laurel wreath leaves circling edge -->
+  <path d="M7 26 C5 18, 10 12, 16 8" stroke="#f1c40f" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M41 26 C43 18, 38 12, 32 8" stroke="#f1c40f" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Officer Bust / Portrait (Napoleon / Commander Style) -->
+  <!-- Uniform Coat / High Gold Embroidered Collar -->
+  <path d="M12 43 C12 34, 18 31, 24 31 C30 31, 36 34, 36 43 Z" fill="#0984e3"/>
+  <path d="M18 31 L24 38 L30 31" fill="#d63031" stroke="#f1c40f" stroke-width="1"/> <!-- Red collar with gold braid -->
+  <!-- Gold Epaulettes -->
+  <circle cx="14" cy="33" r="2.5" fill="#f1c40f"/>
+  <circle cx="34" cy="33" r="2.5" fill="#f1c40f"/>
+  <line x1="24" y1="34" x2="24" y2="43" stroke="#f1c40f" stroke-width="1.5"/> <!-- Legion of Honor ribbon -->
+
+  <!-- Head & Face -->
+  <circle cx="24" cy="24" r="5.5" fill="#f5cd79"/>
+  <!-- Hair -->
+  <path d="M19 22 C18 20, 20 18, 22 19" stroke="#2d3436" stroke-width="1.5"/>
+  <path d="M29 22 C30 20, 28 18, 26 19" stroke="#2d3436" stroke-width="1.5"/>
+
+  <!-- Iconic Black Bicorne Hat with Gold Cockade -->
+  <path d="M11 20 C14 11, 24 10, 24 10 C24 10, 34 11, 37 20 C32 18, 24 17, 11 20 Z" fill="#1e272e" stroke="#2c3e50" stroke-width="0.8"/>
+  <!-- Gold Cockade & French Tricolor or Imperial Ribbon in hat -->
+  <circle cx="24" cy="15" r="2.5" fill="#f1c40f"/>
+  <circle cx="24" cy="15" r="1.5" fill="#e74c3c"/>
+</svg>

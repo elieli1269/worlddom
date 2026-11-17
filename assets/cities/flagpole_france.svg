@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="42" viewBox="0 0 36 42">
+  <!-- Silver / Steel Flagpole -->
+  <line x1="6" y1="3" x2="6" y2="40" stroke="#718093" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="6" cy="3" r="2.5" fill="#f1c40f"/> <!-- Golden spearhead / finial -->
+  <!-- French Tricolor Flag waving in wind -->
+  <path d="M7 6 Q16 4 25 7 L25 21 Q16 18 7 20 Z" fill="#ffffff" stroke="#2c3e50" stroke-width="0.5"/>
+  <!-- Blue band -->
+  <path d="M7 6 Q13 5 13 6.5 L13 20.5 Q7 20 7 20 Z" fill="#0984e3"/>
+  <!-- Red band -->
+  <path d="M19 6 Q25 7 25 7 L25 21 Q19 20 19 20.5 Z" fill="#d63031"/>
+</svg>

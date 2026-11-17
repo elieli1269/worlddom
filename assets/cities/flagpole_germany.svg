@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="42" viewBox="0 0 36 42">
+  <line x1="6" y1="3" x2="6" y2="40" stroke="#718093" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="6" cy="3" r="2.5" fill="#f1c40f"/>
+  <!-- Black White Red Waving Banner -->
+  <path d="M7 6 Q16 4 25 7 L25 11 Q16 8 7 10 Z" fill="#2d3436"/>
+  <path d="M7 10 Q16 8 25 11 L25 16 Q16 13 7 15 Z" fill="#f5f6fa"/>
+  <path d="M7 15 Q16 13 25 16 L25 21 Q16 18 7 20 Z" fill="#d63031"/>
+  <!-- Iron Cross / Eagle silhouette in center -->
+  <circle cx="16" cy="13" r="1.5" fill="#2d3436"/>
+</svg>

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="80" viewBox="0 0 90 80">
+  <!-- Unit base tactical glow/shadow -->
+  <ellipse cx="45" cy="72" rx="36" ry="7" fill="#000000" opacity="0.35"/>
+
+  <!-- SOLDIER 1 (Left - Rear rank) -->
+  <g transform="translate(14, 12)">
+    <!-- Musket with Bayonet -->
+    <line x1="8" y1="52" x2="8" y2="2" stroke="#4a3623" stroke-width="2"/>
+    <line x1="8" y1="18" x2="8" y2="2" stroke="#bdc3c7" stroke-width="1.8"/> <!-- Barrel -->
+    <line x1="8" y1="6" x2="10" y2="0" stroke="#f1c40f" stroke-width="1.5"/> <!-- Bayonet blade -->
+    <!-- Legs & White Trousers -->
+    <rect x="13" y="44" width="4" height="15" fill="#f5f6fa"/>
+    <rect x="18" y="44" width="4" height="15" fill="#eaedf1"/>
+    <rect x="12" y="55" width="5" height="5" fill="#2c3e50"/> <!-- Black gaiters -->
+    <rect x="18" y="55" width="5" height="5" fill="#2c3e50"/>
+    <!-- Torso / Blue Uniform Coat -->
+    <path d="M11 25 L24 25 L23 45 L12 45 Z" fill="#204066"/>
+    <!-- Crossbelts (White straps) -->
+    <line x1="12" y1="26" x2="23" y2="44" stroke="#ffffff" stroke-width="1.6"/>
+    <line x1="23" y1="26" x2="12" y2="44" stroke="#ffffff" stroke-width="1.6"/>
+    <!-- Brass buckle plate -->
+    <rect x="16.5" y="34" width="2" height="2" fill="#f1c40f"/>
+    <!-- Head & Face -->
+    <circle cx="17.5" cy="20" r="4" fill="#f5cd79"/>
+    <!-- Military Shako Hat -->
+    <rect x="14" y="11" width="7" height="9" fill="#1e272e" rx="1"/>
+    <rect x="13" y="19" width="9" height="1.8" fill="#111"/> <!-- Visor -->
+    <polygon points="17.5,7 15.5,11 19.5,11" fill="#e74c3c"/> <!-- Red Plume / Pompon -->
+    <circle cx="17.5" cy="14" r="1.2" fill="#f1c40f"/> <!-- Shako plate -->
+  </g>
+
+  <!-- SOLDIER 2 (Center - Front Officer/Leader) -->
+  <g transform="translate(32, 16)">
+    <!-- Musket with Bayonet held upright -->
+    <line x1="5" y1="48" x2="5" y2="0" stroke="#4a3623" stroke-width="2"/>
+    <line x1="5" y1="14" x2="5" y2="0" stroke="#d2dae2" stroke-width="2"/>
+    <line x1="5" y1="4" x2="7" y2="-4" stroke="#f1c40f" stroke-width="1.6"/>
+    <!-- Legs -->
+    <rect x="14" y="42" width="4.5" height="15" fill="#ffffff"/>
+    <rect x="20" y="42" width="4.5" height="15" fill="#f1f2f6"/>
+    <rect x="13.5" y="53" width="5" height="5.5" fill="#1e272e"/>
+    <rect x="20" y="53" width="5" height="5.5" fill="#1e272e"/>
+    <!-- Torso / Royal Blue Coat with Gold Epaulettes -->
+    <path d="M12 23 L26 23 L25 43 L13 43 Z" fill="#1e3799"/>
+    <!-- Gold Epaulettes on shoulders -->
+    <circle cx="12" cy="24" r="2.2" fill="#f1c40f"/>
+    <circle cx="26" cy="24" r="2.2" fill="#f1c40f"/>
+    <!-- Crossbelts -->
+    <line x1="13" y1="24" x2="25" y2="42" stroke="#ffffff" stroke-width="1.8"/>
+    <line x1="25" y1="24" x2="13" y2="42" stroke="#ffffff" stroke-width="1.8"/>
+    <rect x="17.5" y="32" width="3" height="3" fill="#f1c40f"/>
+    <!-- Face -->
+    <circle cx="19" cy="18" r="4.2" fill="#f5cd79"/>
+    <!-- Shako with tall White/Red Feathered Plume -->
+    <rect x="15" y="8" width="8" height="10" fill="#1e272e" rx="1"/>
+    <rect x="14" y="17" width="10" height="2" fill="#111"/>
+    <path d="M19 8 C17 3, 22 2, 19 -3" stroke="#e74c3c" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="19" cy="12" r="1.5" fill="#f1c40f"/>
+  </g>
+
+  <!-- SOLDIER 3 (Right - Flank Guard) -->
+  <g transform="translate(52, 14)">
+    <!-- Musket with Bayonet -->
+    <line x1="22" y1="50" x2="22" y2="2" stroke="#4a3623" stroke-width="2"/>
+    <line x1="22" y1="16" x2="22" y2="2" stroke="#bdc3c7" stroke-width="1.8"/>
+    <line x1="22" y1="6" x2="24" y2="0" stroke="#f1c40f" stroke-width="1.5"/>
+    <!-- Legs -->
+    <rect x="9" y="44" width="4" height="15" fill="#f5f6fa"/>
+    <rect x="14" y="44" width="4" height="15" fill="#eaedf1"/>
+    <rect x="8.5" y="55" width="5" height="5" fill="#2c3e50"/>
+    <rect x="14" y="55" width="5" height="5" fill="#2c3e50"/>
+    <!-- Torso -->
+    <path d="M7 25 L20 25 L19 45 L8 45 Z" fill="#204066"/>
+    <!-- Crossbelts -->
+    <line x1="8" y1="26" x2="19" y2="44" stroke="#ffffff" stroke-width="1.6"/>
+    <line x1="19" y1="26" x2="8" y2="44" stroke="#ffffff" stroke-width="1.6"/>
+    <!-- Face & Shako -->
+    <circle cx="13.5" cy="20" r="4" fill="#f5cd79"/>
+    <rect x="10" y="11" width="7" height="9" fill="#1e272e" rx="1"/>
+    <rect x="9" y="19" width="9" height="1.8" fill="#111"/>
+    <polygon points="13.5,7 11.5,11 15.5,11" fill="#2ecc71"/> <!-- Green cockade -->
+    <circle cx="13.5" cy="14" r="1.2" fill="#f1c40f"/>
+  </g>
+</svg>

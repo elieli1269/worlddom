@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="42" viewBox="0 0 36 42">
+  <line x1="6" y1="3" x2="6" y2="40" stroke="#718093" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="6" cy="3" r="2.5" fill="#f1c40f"/>
+  <!-- Gold and Red Royal Sovereign Banner -->
+  <path d="M7 6 Q16 4 25 7 L25 21 Q16 18 7 20 Z" fill="#b71540" stroke="#f1c40f" stroke-width="0.8"/>
+  <circle cx="16" cy="13" r="3.5" fill="#f1c40f"/>
+  <polygon points="16,10 17,12 19,12 17.5,14 18,16 16,15 14,16 14.5,14 13,12 15,12" fill="#b71540"/>
+</svg>

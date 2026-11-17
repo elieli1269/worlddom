@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="64" viewBox="0 0 80 64">
+  <!-- Ground Shadow -->
+  <ellipse cx="40" cy="46" rx="36" ry="14" fill="#000000" opacity="0.32"/>
+
+  <!-- Star Fort Rampart Walls (Vauban Bastion) -->
+  <!-- Outer low wall -->
+  <polygon points="12,42 28,32 52,32 68,42 54,54 26,54" fill="#6c7a89"/>
+  <polygon points="12,42 26,54 26,60 12,48" fill="#4d5660"/>
+  <polygon points="26,54 54,54 54,60 26,60" fill="#3b424a"/>
+  <polygon points="54,54 68,42 68,48 54,60" fill="#2c3238"/>
+
+  <!-- Inner Elevated Bastion Plateau -->
+  <polygon points="22,34 34,26 46,26 58,34 48,44 32,44" fill="#88929a"/>
+  <polygon points="22,34 32,44 32,48 22,38" fill="#5a636b"/>
+  <polygon points="32,44 48,44 48,48 32,48" fill="#495057"/>
+
+  <!-- Heavy Coastal/Siege Cannon mounted on turret -->
+  <!-- Cannon base swivel platform -->
+  <ellipse cx="40" cy="35" rx="7" ry="4" fill="#2b3137" stroke="#e0ca92" stroke-width="0.8"/>
+  <!-- Cannon Tube pointed toward top-left -->
+  <polygon points="38,34 22,21 25,18 41,31" fill="#1f2429" stroke="#95a5a6" stroke-width="0.8"/>
+  <rect x="20" y="19" width="3" height="4" transform="rotate(-38 21.5 21)" fill="#e0ca92"/>
+  <!-- Cannon Shield / Gunner Cover -->
+  <polygon points="35,32 43,26 47,31 39,37" fill="#404c55" stroke="#7f8c8d" stroke-width="0.6"/>
+
+  <!-- Embrasures / Sandbag revetments -->
+  <circle cx="28" cy="38" r="1.5" fill="#111"/>
+  <circle cx="52" cy="38" r="1.5" fill="#111"/>
+</svg>
